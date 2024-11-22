@@ -1,0 +1,4 @@
+fastapi[all]
+pydantic
+faster-whisper
+git+https://github.com/huggingface/parler-tts.git
