@@ -28,7 +28,7 @@ class MeloTTS(AbstractTTS):
         self.device = 'auto'
 
     def get_languages(self):
-        return ['EN', 'EN-US', 'EN-BR', 'EN-INDIA', 'ES', 'FR', 'DE', 'IT', 'NL', 'PL', 'PT', 'RU', 'ZH']
+        return ['EN-US', 'EN-BR', 'EN-INDIA', 'ES', 'FR',  'JA', 'ZH', "KR"]
 
     def get_emotions(self):
         return []
@@ -37,7 +37,11 @@ class MeloTTS(AbstractTTS):
 
     def run_tts(self, text: str, output_path: str, language: str, **kwargs):
         assert language in self.get_languages(), f"Language {language} not supported"
-        model = TTS(language=language, device=self.device)
+        if language.startswith("EN"):
+            model = TTS(language="EN", device=self.device)
+        else:
+            model = TTS(language=language, device=self.device)
+            
         speaker_ids = model.hps.data.spk2id
         model.tts_to_file(text, speaker_ids[language], output_path, speed=1.0)
 
