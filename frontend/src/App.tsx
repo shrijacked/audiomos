@@ -19,8 +19,8 @@ function App() {
           <Header />
           <main className="pt-16">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/tts" element={<TextToSpeech />} />
+              {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="/" element={<TextToSpeech />} />
               <Route path="/stt" element={<SpeechToText />} />
               <Route path="/voice-cloning" element={<VoiceCloning />} />
               <Route path="/music-separation" element={<MusicSeparation />} />
