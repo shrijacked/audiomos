@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any
 import routes
+import routes.clean_audio
 import routes.separate_tracks
 import routes.stt
 import routes.tts
@@ -19,6 +20,7 @@ app.add_middleware(
 app.include_router(routes.separate_tracks.router)
 app.include_router(routes.stt.router)
 app.include_router(routes.tts.router)
+app.include_router(routes.clean_audio.router)
 
 
 if __name__ == "__main__":

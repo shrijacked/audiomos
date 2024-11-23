@@ -17,11 +17,23 @@ export default function ApiDetails({
   sampleResponse
 }: ApiDetailsProps) {
   const [copied, setCopied] = React.useState(false);
+  const [getResponse, setGetResponse] = React.useState<string | null>(null);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const testGetEndpoint = async () => {
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      setGetResponse(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error('Error fetching GET endpoint:', error);
+      setGetResponse('Error fetching data');
+    }
   };
 
   return (
@@ -48,6 +60,14 @@ export default function ApiDetails({
               )}
             </button>
           </div>
+          {method === "GET" && (
+            <button
+              onClick={testGetEndpoint}
+              className="mt-2 px-4 my-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+            >
+              Test GET Endpoint
+            </button>
+          )}
         </div>
 
         <div>
@@ -55,8 +75,7 @@ export default function ApiDetails({
           <p className="text-gray-700">{description}</p>
         </div>
 
-        {
-          sampleRequest && (
+        {sampleRequest && (
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Request</h3>
             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
@@ -65,17 +84,23 @@ export default function ApiDetails({
           </div>
         )}
 
+        {sampleResponse && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {sampleResponse}
+            </pre>
+          </div>
+        )}
 
-        {
-          sampleResponse && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
-              <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-                {sampleResponse}
-              </pre>
-            </div>
-          )
-        }
+        {method === "GET" && getResponse && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">GET Response</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {getResponse}
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );

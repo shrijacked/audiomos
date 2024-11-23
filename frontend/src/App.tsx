@@ -9,6 +9,7 @@ import VoiceCloning from './pages/VoiceCloning';
 import MusicSeparation from './pages/MusicSeparation';
 import UsageStats from './pages/UsageStats';
 import Documentation from './pages/Documentation';
+import VoiceCleaning from './pages/VoiceCleaning';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/stt" element={<SpeechToText />} />
               <Route path="/voice-cloning" element={<VoiceCloning />} />
               <Route path="/music-separation" element={<MusicSeparation />} />
+              <Route path='/voice-cleaning' element={<VoiceCleaning />} />
               <Route path="/stats" element={<UsageStats />} />
               <Route path="/docs" element={<Documentation />} />
             </Routes>

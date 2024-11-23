@@ -195,11 +195,17 @@ export default function TextToSpeech() {
         )}
 
         {showApiDetails && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 relative max-w-2xl w-full h-auto">
+          <div
+            className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowApiDetails(false)}
+          >
+            <div
+              className="bg-white rounded-lg shadow-lg p-6 relative max-w-2xl w-full h-4/5 overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={() => setShowApiDetails(false)}
-                className="absolute top-4 right-4 text-white hover:text-red-400 border border-gray-700 bg-gray-800 rounded p-1 transition-colors duration-200 ease-in-out"
+                className="absolute top-0 right-0 text-white hover:text-red-400 border border-gray-700 bg-gray-800 rounded p-1 transition-colors duration-200 ease-in-out"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -214,9 +220,9 @@ export default function TextToSpeech() {
   "emotion": "neutral",
   "speaker": "Thomas"
 }`}
-                sampleResponse={`<Binary audio file in .WAV format>`}
+                sampleResponse={`<Streaming audio in .WAV format>`}
               />
-
+              <div className="my-5"></div>
               <ApiDetails
                 endpoint={`${import.meta.env.VITE_API_URL}/tts/models`}
                 method="GET"

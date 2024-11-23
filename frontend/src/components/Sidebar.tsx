@@ -17,7 +17,7 @@ const navItems = [
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
   { icon: Waves, label: 'Voice Cleaning', path: '/voice-cleaning' },
-  { icon: Music, label: 'Music Separation', path: '/music-separation' },
+  // { icon: Music, label: 'Music Separation', path: '/music-separation' },
   { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
   // { icon: BookOpen, label: 'Documentation', path: '/docs' }
 ];

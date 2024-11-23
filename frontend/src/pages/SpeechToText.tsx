@@ -165,10 +165,10 @@ export default function SpeechToText() {
             <FileText className="w-5 h-5 text-gray-600" />
             <h3 className="font-medium text-gray-700">Transcription</h3>
           </div>
-          <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
+          {/* <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
             <Settings2 className="w-4 h-4" />
             Settings
-          </button>
+          </button> */}
         </div>
 
         {isConverting ? (
