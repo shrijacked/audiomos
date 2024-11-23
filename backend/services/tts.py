@@ -43,6 +43,11 @@ class MeloTTS(AbstractTTS):
             model = TTS(language=language, device=self.device)
             
         speaker_ids = model.hps.data.spk2id
+        print(speaker_ids)
+        if language == "EN-US":
+            pass
+        elif "-" in language and language != "EN-BR":
+            language = language.replace("-", "_")
         model.tts_to_file(text, speaker_ids[language], output_path, speed=1.0)
 
 class ParlerTTS(AbstractTTS):

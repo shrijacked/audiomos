@@ -6,7 +6,7 @@ interface ApiDetailsProps {
   method: string;
   description: string;
   sampleRequest: string;
-  sampleResponse: string;
+  sampleResponse: string | undefined | null;
 }
 
 export default function ApiDetails({
@@ -55,19 +55,27 @@ export default function ApiDetails({
           <p className="text-gray-700">{description}</p>
         </div>
 
-        <div>
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Request</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-            {sampleRequest}
-          </pre>
-        </div>
+        {
+          sampleRequest && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Request</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {sampleRequest}
+            </pre>
+          </div>
+        )}
 
-        <div>
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-            {sampleResponse}
-          </pre>
-        </div>
+
+        {
+          sampleResponse && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
+              <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                {sampleResponse}
+              </pre>
+            </div>
+          )
+        }
       </div>
     </div>
   );
