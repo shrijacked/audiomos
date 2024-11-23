@@ -1,46 +1,101 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Mic, FileText, Settings2 } from 'lucide-react';
+import axios from 'axios';
 
 export default function SpeechToText() {
   const [file, setFile] = useState<File | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [transcription, setTranscription] = useState('');
+  const [models, setModels] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState('');
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Fetch available models
+  useEffect(() => {
+    async function fetchModels() {
+      try {
+        const response = await axios.get(`${API_URL}/stt/models`);
+        setModels(response.data.models);
+        if (response.data.models.length) setSelectedModel(response.data.models[0]);
+      } catch (error) {
+        console.error('Failed to fetch models:', error);
+      }
+    }
+    fetchModels();
+  }, [API_URL]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      // Simulate conversion
-      handleConversion();
+      handleConversion(selectedFile);
     }
   };
 
-  const handleConversion = () => {
+  const handleConversion = async (audioFile: File | Blob) => {
+    if (!selectedModel) {
+      alert('Please select a transcription model.');
+      return;
+    }
+
     setIsConverting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setTranscription(
-        "This is a sample transcription of the audio file. In a real implementation, this would be the actual text converted from the audio using our STT API."
-      );
+    const formData = new FormData();
+    formData.append('audio_file', audioFile);
+    formData.append('language', 'en'); // Default language
+    try {
+      const response = await axios.post(`${API_URL}/stt/transcribe`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      let transcription = response.data.transcription
+      let transcript = ''
+      for (let i = 0; i < transcription.length; i++) {
+        transcript += transcription[i].start + ' - ' + transcription[i].end + ': ' + transcription[i].text + '\n'
+      }
+      setTranscription(transcript);
+    } catch (error) {
+      console.error('Transcription failed:', error);
+      alert('Failed to transcribe the audio. Please try again.');
+    } finally {
       setIsConverting(false);
-    }, 2000);
+    }
   };
 
-  const toggleRecording = () => {
+  const toggleRecording = async () => {
     if (!isRecording) {
-      setIsRecording(true);
-      // Simulate recording for 5 seconds
-      setTimeout(() => {
-        setIsRecording(false);
-        handleConversion();
-      }, 5000);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        setMediaRecorder(recorder);
+  
+        const chunks: Blob[] = [];
+  
+        recorder.ondataavailable = (event) => {
+          chunks.push(event.data);
+        };
+  
+        recorder.onstop = async () => {
+          const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+          const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+          handleConversion(audioFile); // Pass the File object
+        };
+  
+        recorder.start();
+        setIsRecording(true);
+      } catch (error) {
+        console.error('Failed to start recording:', error);
+        alert('Could not access microphone. Please check your permissions.');
+      }
     } else {
+      mediaRecorder?.stop();
       setIsRecording(false);
     }
   };
-
+  
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-6">
@@ -50,8 +105,10 @@ export default function SpeechToText() {
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer"
-               onClick={() => fileInputRef.current?.click()}>
+          <div
+            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+          >
             <input
               type="file"
               ref={fileInputRef}
@@ -64,17 +121,15 @@ export default function SpeechToText() {
               Click to upload or drag and drop<br />
               MP3, WAV, or M4A file
             </p>
-            {file && (
-              <p className="mt-2 text-sm text-blue-600">{file.name}</p>
-            )}
+            {file && <p className="mt-2 text-sm text-blue-600">{file.name}</p>}
           </div>
 
           <div className="flex flex-col items-center justify-center p-8 border-2 border-gray-300 rounded-lg">
             <button
               onClick={toggleRecording}
               className={`p-8 rounded-full ${
-                isRecording 
-                  ? 'bg-red-100 text-red-600 animate-pulse' 
+                isRecording
+                  ? 'bg-red-100 text-red-600 animate-pulse'
                   : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
               }`}
             >
@@ -85,6 +140,25 @@ export default function SpeechToText() {
             </p>
           </div>
         </div>
+
+        {models.length > 0 && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Transcription Model
+            </label>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              {models.map((model) => (
+                <option key={model} value={model}>
+                  {model}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">

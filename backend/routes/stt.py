@@ -14,6 +14,7 @@ async def read_root():
 @router.post("/transcribe")
 async def transcribe(audio_file: UploadFile = File(...), language: str = "en"):
     file_name = audio_file.filename
+    print(f"File name: {file_name}")
     assert file_name, "No file name provided."
     suffix = file_name.split(".")[-1]
     with NamedTemporaryFile(suffix=suffix) as temp_file:
