@@ -1,7 +1,7 @@
 from faster_whisper import WhisperModel, BatchedInferencePipeline
 import torch
 
-WHISPER_MODEL = "small"
+WHISPER_MODEL = "tiny"
 BATCH_SIZE = 8
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
