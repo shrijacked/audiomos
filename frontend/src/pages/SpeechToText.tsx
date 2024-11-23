@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Mic, FileText, Settings2 } from 'lucide-react';
+import { Upload, Mic, FileText, Settings2, X } from 'lucide-react';
 import axios from 'axios';
+import ApiDetails from '../components/ApiDetails';
 
 export default function SpeechToText() {
   const [file, setFile] = useState<File | null>(null);
@@ -12,6 +13,8 @@ export default function SpeechToText() {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showApiDetails, setShowApiDetails] = useState(false);
+
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -98,9 +101,17 @@ export default function SpeechToText() {
   
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Speech to Text</h1>
-        <p className="text-gray-600">Convert audio into text with high accuracy.</p>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Speech to Text</h1>
+          <p className="text-gray-600">Convert audio into text with high accuracy.</p>
+        </div>
+        <button
+          onClick={() => setShowApiDetails(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+          View API Details
+        </button>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -165,10 +176,6 @@ export default function SpeechToText() {
             <FileText className="w-5 h-5 text-gray-600" />
             <h3 className="font-medium text-gray-700">Transcription</h3>
           </div>
-          {/* <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
-            <Settings2 className="w-4 h-4" />
-            Settings
-          </button> */}
         </div>
 
         {isConverting ? (
@@ -195,6 +202,42 @@ export default function SpeechToText() {
           </div>
         )}
       </div>
+
+      {showApiDetails && (
+        <div
+          className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setShowApiDetails(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 relative max-w-2xl w-full h-4/5 overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowApiDetails(false)}
+              className="absolute top-0 right-0 text-white hover:text-red-400 border border-gray-700 bg-gray-800 rounded p-1 transition-colors duration-200 ease-in-out"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <ApiDetails
+              endpoint={`${import.meta.env.VITE_API_URL}/stt/process`}
+              method="POST"
+              description="Process an audio file and transcribe the speech into text."
+              sampleRequest={`<Audio file and selected transcription model>`}
+              sampleResponse={`{
+  "transcription": "This is a sample transcription of the audio."
+}`}
+            />
+            <div className="my-5"></div>
+            <ApiDetails
+              endpoint={`${import.meta.env.VITE_API_URL}/stt/models`}
+              method="GET"
+              description="Retrieve available transcription models."
+              sampleRequest={null}
+              sampleResponse={null}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
