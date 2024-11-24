@@ -3,24 +3,24 @@ import {
   Mic, 
   MessageSquareText, 
   Users, 
-  Waves, 
-  Music, 
+  Sliders, 
+  Layers, 
   BookOpen, 
   BarChart3,
   Home,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Waves // Import Waves icon
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
-// Navigation items for the sidebar
 const navItems = [
   { icon: Home, label: 'Dashboard', path: '/' },
   { icon: MessageSquareText, label: 'Text to Speech', path: '/tts' },
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
-  { icon: Waves, label: 'Voice Cleaning', path: '/voice-cleaning' },
-  { icon: Music, label: 'Music Separation', path: '/music-separation' },
+  { icon: Sliders, label: 'Voice Cleaning', path: '/voice-cleaning' },
+  { icon: Layers, label: 'Music Separation', path: '/music-separation' },
   { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
   { icon: BookOpen, label: 'Documentation', path: '/docs' }
 ];
@@ -35,13 +35,12 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   return (
     <div 
-      className={`h-screen bg-white/80 backdrop-blur-md border-r border-primary-100 fixed left-0 top-0 z-20 transition-all duration-300 ${
+      className={`h-screen bg-white/80 dark:bg-gray-800 backdrop-blur-md border-r border-primary-100 fixed left-0 top-0 z-20 transition-all duration-300 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
-      {/* Header */}
       <div className="flex items-center gap-2 p-4 mb-6">
-        <Waves className="w-8 h-8 text-primary-600" />
+        <Waves className="w-8 h-8 text-primary-600" /> 
         <span className={`text-xl font-bold transition-opacity duration-200 ${
           isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100'
         }`}>
@@ -49,7 +48,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         </span>
         <button 
           onClick={onToggle}
-          className="ml-auto p-1 hover:bg-primary-50 rounded-lg transition-colors duration-200"
+          className="ml-auto p-1 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
         >
           {isCollapsed ? (
             <ChevronRight className="w-5 h-5 text-primary-600" />
@@ -58,13 +57,12 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
           )}
         </button>
       </div>
-
-      {/* Navigation Links */}
+      
       <nav className="space-y-1 px-3">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
-
+          
           return (
             <Link
               key={item.path}
@@ -72,7 +70,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               className={`flex items-center gap-2 p-2 rounded-lg transition-colors duration-200 ${
                 isActive 
                   ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white' 
-                  : 'text-gray-500 hover:bg-primary-50'
+                  : 'text-gray-500 hover:bg-primary-50 dark:hover:bg-gray-700'
               }`}
               title={isCollapsed ? item.label : ''}
             >

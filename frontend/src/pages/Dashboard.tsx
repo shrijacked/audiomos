@@ -4,10 +4,10 @@ import ApiDetails from '../components/ApiDetails';
 
 export default function Dashboard() {
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome back, John!</h1>
-        <p className="text-gray-600">Here's what's happening with your API usage today.</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Welcome back, John!</h1>
+        <p className="text-gray-600 dark:text-gray-300">Here's what's happening with your API usage today.</p>
       </div>
 
       <UsageStats />

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Music, Mic, Waves, Download } from 'lucide-react';
+import { Upload, Music, Waves, Download } from 'lucide-react';
 import ApiDetails from '../components/ApiDetails';
 
 export default function MusicSeparation() {
@@ -35,16 +35,16 @@ export default function MusicSeparation() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Music Separation</h1>
-        <p className="text-gray-600">Separate any song into vocals, instruments, drums, and bass.</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Music Separation</h1>
+        <p className="text-gray-600 dark:text-gray-300">Separate any song into vocals, instruments, drums, and bass.</p>
       </div>
 
       <div className="grid gap-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div 
-            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer mb-6"
+            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer mb-6"
             onClick={() => fileInputRef.current?.click()}
           >
             <input
@@ -54,13 +54,13 @@ export default function MusicSeparation() {
               accept="audio/*"
               className="hidden"
             />
-            <Upload className="w-8 h-8 text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600 text-center">
+            <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               Upload music file<br />
               (MP3, WAV, M4A)
             </p>
             {file && (
-              <p className="mt-2 text-sm text-blue-600">{file.name}</p>
+              <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">{file.name}</p>
             )}
           </div>
 
@@ -85,12 +85,12 @@ export default function MusicSeparation() {
           {Object.keys(separatedTracks).length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(separatedTracks).map(([track, url]) => (
-                <div key={track} className="p-4 bg-gray-50 rounded-lg">
+                <div key={track} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-gray-700 capitalize">{track}</h3>
-                    <button className="text-blue-600 hover:text-blue-700">
+                    <h3 className="font-medium text-gray-700 dark:text-gray-300 capitalize">{track}</h3>
+                    <a href={url} download className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500">
                       <Download className="w-4 h-4" />
-                    </button>
+                    </a>
                   </div>
                   <audio controls className="w-full">
                     <source src={url} type="audio/mpeg" />

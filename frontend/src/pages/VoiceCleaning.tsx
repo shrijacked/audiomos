@@ -30,16 +30,16 @@ export default function VoiceCleaning() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Voice Cleaning</h1>
-        <p className="text-gray-600">Remove background noise, enhance clarity, and improve audio quality.</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Voice Cleaning</h1>
+        <p className="text-gray-600 dark:text-gray-300">Remove background noise, enhance clarity, and improve audio quality.</p>
       </div>
 
       <div className="grid gap-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div 
-            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer mb-6"
+            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer mb-6"
             onClick={() => fileInputRef.current?.click()}
           >
             <input
@@ -49,23 +49,23 @@ export default function VoiceCleaning() {
               accept="audio/*"
               className="hidden"
             />
-            <Upload className="w-8 h-8 text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600 text-center">
+            <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               Upload audio file<br />
               (MP3, WAV, M4A)
             </p>
             {file && (
-              <p className="mt-2 text-sm text-blue-600">{file.name}</p>
+              <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">{file.name}</p>
             )}
           </div>
 
           <div className="space-y-6 mb-6">
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Noise Reduction
                 </label>
-                <span className="text-sm text-gray-500">{settings.noiseReduction}%</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{settings.noiseReduction}%</span>
               </div>
               <input
                 type="range"
@@ -79,10 +79,10 @@ export default function VoiceCleaning() {
 
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Voice Clarity
                 </label>
-                <span className="text-sm text-gray-500">{settings.clarity}%</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{settings.clarity}%</span>
               </div>
               <input
                 type="range"
@@ -96,10 +96,10 @@ export default function VoiceCleaning() {
 
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Dereverberation
                 </label>
-                <span className="text-sm text-gray-500">{settings.dereverberation}%</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{settings.dereverberation}%</span>
               </div>
               <input
                 type="range"
@@ -131,31 +131,31 @@ export default function VoiceCleaning() {
               )}
             </button>
 
-            <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
+            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
               <Settings2 className="w-4 h-4" />
               Advanced Settings
             </button>
           </div>
 
           {cleanedAudio && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-medium text-gray-700">Cleaned Audio</h3>
-                <a href={cleanedAudio} download className="flex items-center gap-2 text-blue-600 hover:text-blue-700">
+                <h3 className="font-medium text-gray-700 dark:text-gray-300">Cleaned Audio</h3>
+                <a href={cleanedAudio} download className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500">
                   <Download className="w-4 h-4" />
                   Download
                 </a>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600 mb-2">Original</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Original</p>
                   <audio controls className="w-full">
                     <source src={file ? URL.createObjectURL(file) : ''} type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 mb-2">Enhanced</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Enhanced</p>
                   <audio controls className="w-full">
                     <source src={cleanedAudio} type="audio/mpeg" />
                     Your browser does not support the audio element.
