@@ -6,7 +6,7 @@ interface ApiDetailsProps {
   method: string;
   description: string;
   sampleRequest: string;
-  sampleResponse: string;
+  sampleResponse: string | undefined | null;
 }
 
 export default function ApiDetails({
@@ -17,6 +17,7 @@ export default function ApiDetails({
   sampleResponse
 }: ApiDetailsProps) {
   const [copied, setCopied] = React.useState(false);
+  const [getResponse, setGetResponse] = React.useState<string | null>(null);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -24,34 +25,49 @@ export default function ApiDetails({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const testGetEndpoint = async () => {
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      setGetResponse(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error('Error fetching GET endpoint:', error);
+      setGetResponse('Error fetching data');
+    }
+  };
+
   return (
-    <div className="card p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <div className="p-2 bg-gradient-to-br from-primary-100 to-primary-50 rounded-xl">
-          <Code className="w-5 h-5 text-primary-600" />
-        </div>
-        <h2 className="text-lg font-semibold bg-gradient-to-r from-primary-600 to-primary-800 text-transparent bg-clip-text">
-          API Details
-        </h2>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Code className="w-5 h-5 text-blue-600" />
+        <h2 className="text-lg font-semibold text-gray-800">API Details</h2>
       </div>
 
       <div className="space-y-6">
         <div>
           <h3 className="text-sm font-medium text-gray-600 mb-2">Endpoint</h3>
-          <div className="flex items-center gap-2 bg-primary-50 p-3 rounded-xl">
-            <span className="text-primary-600 font-mono font-medium">{method}</span>
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+            <span className="text-green-600 font-mono">{method}</span>
             <span className="font-mono text-gray-800">{endpoint}</span>
             <button
               onClick={() => copyToClipboard(endpoint)}
-              className="ml-auto hover:bg-primary-100 p-1 rounded-lg transition-colors duration-200"
+              className="ml-auto hover:bg-gray-200 p-1 rounded"
             >
               {copied ? (
-                <CheckCircle className="w-4 h-4 text-primary-600" />
+                <CheckCircle className="w-4 h-4 text-green-600" />
               ) : (
                 <Copy className="w-4 h-4 text-gray-500" />
               )}
             </button>
           </div>
+          {method === "GET" && (
+            <button
+              onClick={testGetEndpoint}
+              className="mt-2 px-4 my-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+            >
+              Test GET Endpoint
+            </button>
+          )}
         </div>
 
         <div>
@@ -59,21 +75,33 @@ export default function ApiDetails({
           <p className="text-gray-700">{description}</p>
         </div>
 
-        <div>
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Request</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto font-mono text-sm">
-            {sampleRequest}
-          </pre>
-        </div>
+        {sampleRequest && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Request</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {sampleRequest}
+            </pre>
+          </div>
+        )}
 
-        <div>
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto font-mono text-sm">
-            {sampleResponse}
-          </pre>
-        </div>
+        {sampleResponse && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">Sample Response</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {sampleResponse}
+            </pre>
+          </div>
+        )}
+
+        {method === "GET" && getResponse && (
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-2">GET Response</h3>
+            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+              {getResponse}
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-

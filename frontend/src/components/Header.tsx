@@ -34,9 +34,9 @@ export default function Header() {
             )}
           </button>
 
-          <button className="p-2 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-xl relative transition-colors duration-200">
+          {/* <button className="p-2 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-xl relative transition-colors duration-200">
             <Bell className="w-5 h-5 text-primary-600" />
-          </button>
+          </button> */}
         </div>
       </div>
     </header>

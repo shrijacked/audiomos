@@ -15,13 +15,13 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  { icon: Home, label: 'Dashboard', path: '/' },
-  { icon: MessageSquareText, label: 'Text to Speech', path: '/tts' },
+  // { icon: Home, label: 'Dashboard', path: '/' },
+  { icon: MessageSquareText, label: 'Text to Speech', path: '/' },
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
   { icon: Sliders, label: 'Voice Cleaning', path: '/voice-cleaning' },
-  { icon: Layers, label: 'Music Separation', path: '/music-separation' },
-  { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
+  // { icon: Layers, label: 'Music Separation', path: '/music-separation' },
+  // { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
   { icon: BookOpen, label: 'Documentation', path: '/docs' }
 ];
 
