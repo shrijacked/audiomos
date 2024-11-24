@@ -9,23 +9,25 @@ import VoiceCloning from './pages/VoiceCloning';
 import MusicSeparation from './pages/MusicSeparation';
 import UsageStats from './pages/UsageStats';
 import Documentation from './pages/Documentation';
-import VoiceCleaning from './pages/VoiceCleaning';
+import VoiceCleaning from './pages/VoiceCleaning'; // Import VoiceCleaning page
 
 function App() {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false);
+
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="ml-64">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50">
+        <Sidebar isCollapsed={isSidebarCollapsed} onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
+        <div className={`transition-all duration-300 ${isSidebarCollapsed ? 'ml-20' : 'ml-64'}`}>
           <Header />
           <main className="pt-16">
             <Routes>
-              {/* <Route path="/" element={<Dashboard />} /> */}
-              <Route path="/" element={<TextToSpeech />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/tts" element={<TextToSpeech />} />
               <Route path="/stt" element={<SpeechToText />} />
               <Route path="/voice-cloning" element={<VoiceCloning />} />
               <Route path="/music-separation" element={<MusicSeparation />} />
-              <Route path='/voice-cleaning' element={<VoiceCleaning />} />
+              <Route path="/voice-cleaning" element={<VoiceCleaning />} /> {/* Add VoiceCleaning route */}
               <Route path="/stats" element={<UsageStats />} />
               <Route path="/docs" element={<Documentation />} />
             </Routes>
