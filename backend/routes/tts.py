@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from services.db import deduct_credits_by_one
 from services.tts import get_supported_models_and_metadata, run_tts
 import io
 
@@ -20,6 +21,8 @@ class SynthesizeTTSRequest(BaseModel):
     language: str
     emotion: str | None = None
     speaker: str | None = None
+    
+    api_key: str | None = None
 
 @router.post("/synthesize")
 async def synthesize_tts(request: SynthesizeTTSRequest):
@@ -34,6 +37,8 @@ async def synthesize_tts(request: SynthesizeTTSRequest):
             emotion=request.emotion,
             speaker=request.speaker
         )
+        if request.api_key:
+            deduct_credits_by_one(request.api_key)
         audio_file = io.BytesIO()
         with open(output_path, "rb") as f:
             audio_file.write(f.read())

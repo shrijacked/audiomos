@@ -2,6 +2,7 @@ from faster_whisper import WhisperModel
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer
+from tortoise.api import TextToSpeech
 
 WHISPER_MODEL = "tiny"
 BATCH_SIZE = 8
@@ -13,4 +14,4 @@ model = WhisperModel(
 )
 parler_model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-expresso").to(device)
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-expresso")
-        
+tts = TextToSpeech(device=device, kv_cache=True)

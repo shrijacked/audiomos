@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cosmjs/launchpad": "^0.27.1",
+    "@cosmjs/stargate": "0.28.2",
     "axios": "^1.7.7",
+    "buffer": "^6.0.3",
+    "cosmjs-types": "0.4.1",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

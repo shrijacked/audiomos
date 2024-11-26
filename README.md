@@ -10,6 +10,11 @@ Official Repo for AudioMos - APIs and Dashboard for public TTS/Audio Models buil
 
 
 ### For running Backend:
+## Docker:
+1. Install Docker
+2. docker-compose up
+
+## Local Running:
 1. Install Conda or other virtual environment manager
 2. Create a virtual environment and run `pip install -r requirements.txt`
 3. Run `python setup.py`, to install a few requirements for the backend and wait for few minutes

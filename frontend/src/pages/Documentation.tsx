@@ -1,76 +1,166 @@
-import React from 'react';
-import { Book, Code, Terminal, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { SigningStargateClient } from "@cosmjs/stargate";
 
-const guides = [
-  {
-    title: 'Getting Started',
-    description: 'Learn the basics of AudioMOS API and how to make your first API call.',
-    icon: Book,
-    link: '#getting-started'
-  },
-  {
-    title: 'API Reference',
-    description: 'Detailed documentation of all API endpoints, parameters, and responses.',
-    icon: Code,
-    link: '#api-reference'
-  },
-  {
-    title: 'Code Examples',
-    description: 'Ready-to-use code samples in various programming languages.',
-    icon: Terminal,
-    link: '#code-examples'
-  },
-  {
-    title: 'Best Practices',
-    description: 'Tips and recommendations for optimal API usage and performance.',
-    icon: Zap,
-    link: '#best-practices'
-  }
-];
+interface Api {
+  api_key: string;
+  credits_left: number;
+}
 
-export default function Documentation() {
+export default function Documentation({ address }: { address: string }) {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const chainId = import.meta.env.VITE_AKASH_CHAIN_ID;
+  const akashRPC = import.meta.env.VITE_AKASH_RPC_URL;
+
+  const [myAPIs, setMyAPIs] = useState<Api[]>([]);
+  const [moneyPaid, setMoneyPaid] = useState<string>('1');
+  const [newApiKey, setNewApiKey] = useState<string | null>(null);
+
+  const getMyCurrentApis = async (address: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/apis/list-apis`, {
+        params: { address },
+      });
+      setMyAPIs(response.data.apis);
+    } catch (error) {
+      console.error('Error fetching APIs:', error);
+    }
+  };
+
+  const sendTokens = async (recipientAddress: string, amount: number) => {
+    try {
+      if (!window.keplr) {
+        alert("Please install the Keplr extension.");
+        return;
+      }
+      await window.keplr.enable(chainId);
+      const offlineSigner = window.keplr.getOfflineSigner(chainId);
+      const accounts = await offlineSigner.getAccounts();
+
+      const client = await SigningStargateClient.connectWithSigner(
+        akashRPC,
+        offlineSigner
+      );
+
+      const senderAddress = accounts[0].address;
+      const amountInMicro = {
+        denom: "uakt",
+        amount: String(amount * 1_000_000),
+      };
+
+      const fee = {
+        amount: [{ denom: "uakt", amount: "5000" }],
+        gas: "200000",
+      };
+
+      const result = await client.sendTokens(
+        senderAddress,
+        recipientAddress,
+        [amountInMicro],
+        fee,
+        "Transaction memo"
+      );
+
+      if (result.code === 0) {
+        const response = await axios.post(`${API_URL}/apis/create-api`, null, {
+          params: { address, money_paid: amount },
+        });
+        setNewApiKey(response.data.api_key);
+        getMyCurrentApis(address);
+        alert("Transaction successful!");
+      } else {
+        alert(`Transaction failed: ${result.rawLog}`);
+      }
+    } catch (error) {
+      console.error("Error sending tokens:", error);
+      alert("An error occurred while sending tokens.");
+    }
+  };
+
+  const createApi = async () => {
+    try {
+      const amount = parseFloat(moneyPaid);
+      if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+      }
+      const parentWallet = import.meta.env.VITE_AKASH_MUNYON_WALLET;
+      await sendTokens(parentWallet, amount);
+    } catch (error) {
+      console.error("Error creating API:", error);
+    }
+  };
+
+  const deleteApiKey = async (apiKey: string) => {
+    try {
+      const response = await axios.delete(`${API_URL}/apis/delete-api`, {
+        params: { address, api_key: apiKey },
+      });
+      if (response.status === 200) {
+        alert("API key deleted successfully.");
+        getMyCurrentApis(address);
+      }
+    } catch (error) {
+      console.error("Error deleting API key:", error);
+      alert("An error occurred while deleting the API key.");
+    }
+  };
+
+  useEffect(() => {
+    getMyCurrentApis(address);
+  }, [address]);
+
   return (
     <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Documentation</h1>
-        <p className="text-gray-600 dark:text-gray-300">Everything you need to know about using AudioMOS API.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {guides.map((guide) => {
-          const Icon = guide.icon;
-          return (
-            <a
-              key={guide.title}
-              href={guide.link}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+      <section>
+        <h2 className="text-2xl font-bold mb-4">My APIs</h2>
+        {myAPIs.length > 0 ? (
+          myAPIs.map((api) => (
+            <div
+              key={api.api_key}
+              className="bg-gray-800 rounded-lg p-4 mb-4 shadow-md border border-gray-700"
             >
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 dark:text-white mb-1">{guide.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{guide.description}</p>
-                </div>
-              </div>
-            </a>
-          )
-        })}
-      </div>
+              <h3 className="text-xl text-white font-semibold">API Key</h3>
+              <p className="text-white">Key: {api.api_key}</p>
+              <p className="text-white">Credits Left: {api.credits_left}</p>
+              <button
+                onClick={() => deleteApiKey(api.api_key)}
+                className="bg-red-500 text-white px-4 py-2 mt-2 rounded hover:bg-red-600"
+              >
+                Delete API Key
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No APIs available. Create one to get started!</p>
+        )}
+      </section>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Quick Start Guide</h2>
-        <div className="prose prose-blue dark:prose-dark max-w-none">
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Create a New API</h2>
+        <p>Price: 1 AKT (500 generations)</p>
+        <button
+          onClick={() => createApi()}
+          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded hover:bg-blue-600"
+        >
+          Create API
+        </button>
+        {newApiKey && (
+          <div className="mt-4 text-green-500">New API Key: {newApiKey}</div>
+        )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Quick Start Guide</h2>
+        <div>
           <h3>1. Authentication</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/auth \\
   -H "Content-Type: application/json" \\
   -d '{"api_key": "your_api_key"}'`}
           </pre>
-
-          <h3>2. Making Your First API Call</h3>
-          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+          <h3>2. Make Your First API Call</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/tts \\
   -H "Authorization: Bearer your_access_token" \\
   -H "Content-Type: application/json" \\
@@ -79,37 +169,8 @@ export default function Documentation() {
     "voice_id": "en-US-1"
   }'`}
           </pre>
-
-          <h3>3. SDK Installation</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">npm</p>
-              <pre className="bg-gray-900 text-gray-100 p-2 rounded-lg">
-                npm install audiomos
-              </pre>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">pip</p>
-              <pre className="bg-gray-900 text-gray-100 p-2 rounded-lg">
-                pip install audiomos
-              </pre>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-700 dark:to-blue-800 rounded-lg p-6 text-white">
-        <h2 className="text-xl font-semibold mb-2">Need Help?</h2>
-        <p className="mb-4">Our support team is available 24/7 to assist you with any questions.</p>
-        <div className="flex gap-4">
-          <button className="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 dark:bg-gray-200 dark:text-blue-800 dark:hover:bg-gray-300">
-            Contact Support
-          </button>
-          <button className="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 dark:bg-blue-900 dark:hover:bg-blue-950">
-            Join Discord
-          </button>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

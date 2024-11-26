@@ -22,7 +22,7 @@ const navItems = [
   { icon: Sliders, label: 'Voice Cleaning', path: '/voice-cleaning' },
   // { icon: Layers, label: 'Music Separation', path: '/music-separation' },
   // { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
-  { icon: BookOpen, label: 'Documentation', path: '/docs' }
+  { icon: BookOpen, label: 'Documentation', path: '/apis' }
 ];
 
 interface SidebarProps {
