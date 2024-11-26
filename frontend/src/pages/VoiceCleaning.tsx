@@ -62,11 +62,11 @@ export default function VoiceCleaning() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Voice Cleaning</h1>
-          <p className="text-gray-600">Remove background noise and enhance audio clarity.</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Voice Cleaning</h1>
+          <p className="text-gray-600 dark:text-gray-300">Remove background noise and enhance audio clarity.</p>
         </div>
         <button
           onClick={() => setShowApiDetails(true)}
@@ -76,9 +76,9 @@ export default function VoiceCleaning() {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div
-          className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer mb-6"
+          className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer mb-6"
           onClick={() => fileInputRef.current?.click()}
         >
           <input
@@ -88,20 +88,20 @@ export default function VoiceCleaning() {
             accept="audio/*"
             className="hidden"
           />
-          <Upload className="w-8 h-8 text-gray-400 mb-2" />
-          <p className="text-sm text-gray-600 text-center">
+          <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
             Upload audio file<br />
             (MP3, WAV, M4A)
           </p>
-          {file && <p className="mt-2 text-sm text-blue-600">{file.name}</p>}
+          {file && <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">{file.name}</p>}
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Select Model</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Model</label>
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
           >
             <option value="">Select a model</option>
             {models.map((model) => (
@@ -133,17 +133,17 @@ export default function VoiceCleaning() {
         </div>
 
         {cleanedAudioUrl && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h3 className="font-medium text-gray-700 mb-2">Original Audio</h3>
+                <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Original Audio</h3>
                 <audio controls className="w-full">
                   <source src={file ? URL.createObjectURL(file) : ''} type={file?.type || 'audio/mpeg'} />
                   Your browser does not support the audio element.
                 </audio>
               </div>
               <div>
-                <h3 className="font-medium text-gray-700 mb-2">Cleaned Audio</h3>
+                <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Cleaned Audio</h3>
                 <audio controls className="w-full">
                   <source src={cleanedAudioUrl} type="audio/wav" />
                   Your browser does not support the audio element.
@@ -169,7 +169,7 @@ export default function VoiceCleaning() {
             onClick={() => setShowApiDetails(false)}
           >
             <div
-              className="bg-white rounded-lg shadow-lg p-6 relative max-w-2xl w-full h-4/5 overflow-y-auto"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 relative max-w-2xl w-full h-4/5 overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <button
