@@ -34,8 +34,12 @@ RUN python3 -c "from tortoise.api import TextToSpeech; tts = TextToSpeech(device
 RUN python3 setup.py
 RUN pip install git+https://github.com/myshell-ai/MeloTTS.git
 RUN pip install --upgrade transformers
-RUN pip install flash-attn
 RUN python3 -c "from faster_whisper import WhisperModel; model = WhisperModel('medium', device='cpu')"
+RUN pip install ctranslate2==4.4.0
+# point to VENV's local CUDA 11.8 python lib
+RUN apt-get update && apt-get install libcudnn8 -y
+RUN export LD_LIBRARY_PATH=`python3 -c 'import os; import nvidia.cublas.lib; import nvidia.cudnn.lib; print(os.path.dirname(nvidia.cublas.lib.__file__) + ":" + os.path.dirname(nvidia.cudnn.lib.__file__))'`
+RUN python3 -c "import nltk; nltk.download('averaged_perceptron_tagger_eng')"
 COPY . .
 EXPOSE 8000
 
