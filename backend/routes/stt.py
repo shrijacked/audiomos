@@ -28,4 +28,4 @@ async def transcribe(audio_file: UploadFile = File(...), language: str = "en", a
 
 @router.get("/models")
 async def get_models():
-    return {"models": ["whisper"]}
+    return {"models": ["whisper-medium", "whisper-tiny"]}
