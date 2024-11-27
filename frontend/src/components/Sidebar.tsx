@@ -31,7 +31,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   return (
     <div 
-      className={`h-screen bg-white/80 dark:bg-gray-800 backdrop-blur-md border-r border-primary-100 fixed left-0 top-0 z-20 transition-all duration-300 ${
+      className={`h-screen bg-white/80 dark:bg-gray-800 backdrop-blur-md fixed left-0 top-0 z-20 transition-all duration-300 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
