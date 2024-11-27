@@ -34,7 +34,6 @@ RUN python3 -c "from tortoise.api import TextToSpeech; tts = TextToSpeech(device
 RUN python3 setup.py
 RUN pip install git+https://github.com/myshell-ai/MeloTTS.git
 RUN pip install --upgrade transformers
-RUN pip install flash-attn
 RUN python3 -c "from faster_whisper import WhisperModel; model = WhisperModel('medium', device='cpu')"
 COPY . .
 EXPOSE 8000
