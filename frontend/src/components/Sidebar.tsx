@@ -13,7 +13,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  { icon: Home, label: 'Home', path: '/' },
+  // { icon: Home, label: 'Home', path: '/' },
   { icon: MessageSquareText, label: 'Text to Speech', path: '/tts' },
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
