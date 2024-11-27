@@ -36,7 +36,7 @@ export default function Hero() {
             onClick={() => navigate('/apis')}
             className="px-8 py-4 bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-400 border border-primary-200 dark:border-primary-700 rounded-xl hover:bg-primary-50 dark:hover:bg-gray-700 transition-all duration-200"
           >
-            View Documentation
+            Web API Documentation
           </button>
         </div>
       </div>

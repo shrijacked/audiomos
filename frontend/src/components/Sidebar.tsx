@@ -18,7 +18,7 @@ const navItems = [
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
   { icon: Sliders, label: 'Voice Cleaning', path: '/voice-cleaning' },
-  { icon: BookOpen, label: 'Documentation', path: '/apis' }
+  { icon: BookOpen, label: 'Web API Documentation', path: '/apis' }
 ];
 
 interface SidebarProps {

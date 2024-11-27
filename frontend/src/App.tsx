@@ -7,7 +7,7 @@ import TextToSpeech from './pages/TextToSpeech';
 import SpeechToText from './pages/SpeechToText';
 import VoiceCloning from './pages/VoiceCloning';
 import VoiceCleaning from './pages/VoiceCleaning';
-import Documentation from './pages/Documentation';
+import Api from './pages/api';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -26,7 +26,7 @@ function App() {
               <Route path="/stt" element={<SpeechToText />} />
               <Route path="/voice-cloning" element={<VoiceCloning />} />
               <Route path="/voice-cleaning" element={<VoiceCleaning />} />
-              <Route path="/apis" element={<Documentation address={address} />} />
+              <Route path="/apis" element={<Api address={address} />} />
               <Route path="*" element={<div className="text-gray-800 dark:text-gray-200">404 - Page Not Found</div>} />
             </Routes>
           </main>
