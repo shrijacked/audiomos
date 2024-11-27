@@ -4,9 +4,7 @@ import {
   MessageSquareText, 
   Users, 
   Sliders, 
-  Layers, 
   BookOpen, 
-  BarChart3,
   Home,
   ChevronLeft,
   ChevronRight,
@@ -15,14 +13,12 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  // { icon: Home, label: 'Dashboard', path: '/' },
-  { icon: MessageSquareText, label: 'Text to Speech', path: '/' },
+  { icon: Home, label: 'Home', path: '/' },
+  { icon: MessageSquareText, label: 'Text to Speech', path: '/tts' },
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
   { icon: Sliders, label: 'Voice Cleaning', path: '/voice-cleaning' },
-  // { icon: Layers, label: 'Music Separation', path: '/music-separation' },
-  // { icon: BarChart3, label: 'Usage Stats', path: '/stats' },
-  { icon: BookOpen, label: 'Documentation', path: '/apis' }
+  { icon: BookOpen, label: 'Web API Documentation', path: '/apis' }
 ];
 
 interface SidebarProps {
@@ -40,7 +36,9 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
       }`}
     >
       <div className="flex items-center gap-2 p-4 mb-6">
-        <Waves className="w-8 h-8 text-primary-600" /> 
+        <Link to="/">
+          <Waves className="w-8 h-8 text-primary-600" /> 
+        </Link>
         <span className={`text-xl font-bold transition-opacity duration-200 ${
           isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100'
         }`}>
