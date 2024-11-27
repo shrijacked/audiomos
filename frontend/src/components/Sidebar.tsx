@@ -13,7 +13,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  { icon: Home, label: 'Home', path: '/' },
+  // { icon: Home, label: 'Home', path: '/' },
   { icon: MessageSquareText, label: 'Text to Speech', path: '/tts' },
   { icon: Mic, label: 'Speech to Text', path: '/stt' },
   { icon: Users, label: 'Voice Cloning', path: '/voice-cloning' },
@@ -31,7 +31,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   return (
     <div 
-      className={`h-screen bg-white/80 dark:bg-gray-800 backdrop-blur-md border-r border-primary-100 fixed left-0 top-0 z-20 transition-all duration-300 ${
+      className={`h-screen bg-white/80 dark:bg-gray-800 backdrop-blur-md fixed left-0 top-0 z-20 transition-all duration-300 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
