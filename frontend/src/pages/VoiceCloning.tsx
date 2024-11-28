@@ -20,30 +20,115 @@ export default function VoiceCloning() {
       setFile(selectedFile);
     }
   };
-
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder.current = new MediaRecorder(stream);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          sampleSize: 16,
+          volume: 1.0
+        }
+      });
+      
+      mediaRecorder.current = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus',
+        audioBitsPerSecond: 16000
+      });
+      
       audioChunks.current = [];
-
+  
       mediaRecorder.current.ondataavailable = (event) => {
-        audioChunks.current.push(event.data);
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
       };
-
-      mediaRecorder.current.onstop = () => {
-        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-        setRecordedAudio(audioBlob);
-        setFile(new File([audioBlob], 'recorded-sample.wav', { type: 'audio/wav' }));
-        stream.getTracks().forEach(track => track.stop());
+  
+      mediaRecorder.current.onstop = async () => {
+        try {
+          const audioBlob = new Blob(audioChunks.current, { 
+            type: 'audio/webm;codecs=opus' 
+          });
+          
+          // Convert webm to wav using AudioContext
+          const audioContext = new AudioContext({
+            sampleRate: 16000
+          });
+          const audioBuffer = await audioBlob.arrayBuffer();
+          const audioData = await audioContext.decodeAudioData(audioBuffer);
+          
+          // Create WAV blob
+          const wavBlob = await convertToWav(audioData);
+          setRecordedAudio(wavBlob);
+          setFile(new File([wavBlob], 'recorded-sample.wav', { type: 'audio/wav' }));
+        } catch (err) {
+          console.error('Error processing audio:', err);
+        } finally {
+          stream.getTracks().forEach(track => track.stop());
+          audioContext?.close();
+        }
       };
-
-      mediaRecorder.current.start();
+  
+      // Start recording with 250ms timeslices
+      mediaRecorder.current.start(250);
       setIsRecording(true);
     } catch (error) {
       console.error('Error accessing microphone:', error);
       alert('Could not access microphone');
     }
+  };
+  
+  // Helper function to convert AudioBuffer to WAV
+  const convertToWav = async (audioBuffer: AudioBuffer): Promise<Blob> => {
+    const numOfChannels = audioBuffer.numberOfChannels;
+    const length = audioBuffer.length * numOfChannels * 2;
+    const buffer = new ArrayBuffer(44 + length);
+    const view = new DataView(buffer);
+    const channels = [];
+    let offset = 0;
+    let pos = 0;
+  
+    // Write WAV header
+    setUint32(0x46464952);                         // "RIFF"
+    setUint32(36 + length);                        // file length
+    setUint32(0x45564157);                         // "WAVE"
+    setUint32(0x20746D66);                         // "fmt " chunk
+    setUint32(16);                                 // length = 16
+    setUint16(1);                                  // PCM (uncompressed)
+    setUint16(numOfChannels);
+    setUint32(audioBuffer.sampleRate);
+    setUint32(audioBuffer.sampleRate * 2 * numOfChannels); // avg. bytes/sec
+    setUint16(numOfChannels * 2);                  // block-align
+    setUint16(16);                                 // 16-bit
+    setUint32(0x61746164);                         // "data" - chunk
+    setUint32(length);                             // chunk length
+  
+    // Write interleaved audio data
+    for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
+      channels.push(audioBuffer.getChannelData(i));
+    }
+  
+    while (pos < audioBuffer.length) {
+      for (let i = 0; i < numOfChannels; i++) {
+        let sample = Math.max(-1, Math.min(1, channels[i][pos]));
+        sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+        view.setInt16(44 + offset, sample, true);
+        offset += 2;
+      }
+      pos++;
+    }
+  
+    function setUint16(data: number) {
+      view.setUint16(pos, data, true);
+      pos += 2;
+    }
+  
+    function setUint32(data: number) {
+      view.setUint32(pos, data, true);
+      pos += 4;
+    }
+  
+    return new Blob([buffer], { type: 'audio/wav' });
   };
 
   const stopRecording = () => {
