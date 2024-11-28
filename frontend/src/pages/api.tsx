@@ -153,63 +153,55 @@ export default function Documentation({ address }: { address: string }) {
       <section className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Quick Start Guide</h2>
         <div>
-          <h3>1. Authentication</h3>
+          <h3>1. Text-to-Speech</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/auth \\
-  -H "Content-Type: application/json" \\
-  -d '{"api_key": "your_api_key"}'`}
+          {`curl -X POST \\
+          -H "Content-Type: application/json" \\
+          -d '{
+          "model_name": "text-to-speech",
+          "text": "Hello world",
+          "language": "en-US",
+          "emotion": "neutral",
+          "speaker": "JohnDoe",
+          "speed": 1.0,
+          "pitch": 0.5
+          }' \\
+          -o output.wav \\
+          $API_URL/tts/synthesize`}
+          </pre>
+          <br />  
+
+          <h3>2. Speech-to-Text</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
+          {`curl -X POST \\
+          -H "Content-Type: multipart/form-data" \\
+          -F "file=@<input_audio_file_path>" \\
+          -o <output_file_path> \\
+          $API_URL/stt/transcribe`}
           </pre>
           <br />
-          <h3>2. Make Your First API Call</h3>
+      
+          <h3>3. Voice Cleaning</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/tts \\
-  -H "Authorization: Bearer your_access_token" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "text": "Hello, welcome to AudioMOS!",
-    "voice_id": "en-US-1"
-  }'`}
+          {`curl -X POST \\
+          -H "Content-Type: multipart/form-data" \\
+          -F "audio_file=@path_to_audio_file.wav" \\
+          -o cleaned_audio_file.wav \\
+          $API_URL/clean-audio/process`}
           </pre>
           <br />
-          <h3>3. Text-to-Speech</h3>
+        
+          <h3>4. Voice Cloning</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/tts \\
-  -H "Authorization: Bearer your_access_token" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "text": "Transforming text into spoken words.",
-    "voice_id": "en-US-1",
-    "speed": 1.0,
-    "pitch": 0.0
-  }'`}
+          {`curl -X POST \\
+          -H "Content-Type: multipart/form-data" \\
+          -F "file=@path_to_audio_file.wav" \\
+          -F "text=sampleText" \\
+          -o cloned_audio.wav \\
+          $API_URL/vc/synthesize`}
           </pre>
           <br />
-          <h3>4. Speech-to-Text</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/stt \\
-  -H "Authorization: Bearer your_access_token" \\
-  -H "Content-Type: multipart/form-data" \\
-  -F "audio_file=@path_to_audio_file.wav" \\
-  -F "language=en-US"`}
-          </pre>
-          <br />
-          <h3>5. Voice Cleaning</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/clean-voice \\
-  -H "Authorization: Bearer your_access_token" \\
-  -H "Content-Type: multipart/form-data" \\
-  -F "audio_file=@path_to_audio_file_with_noise.wav"`}
-          </pre>
-          <br />
-          <h3>6. Voice Cloning</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-            {`curl -X POST https://api.audiomos.com/v1/clone-voice \\
-  -H "Authorization: Bearer your_access_token" \\
-  -H "Content-Type: multipart/form-data" \\
-  -F "sample_voice_file=@path_to_sample_voice.wav" \\
-  -F "text_to_speak=This is my cloned voice speaking!"`}
-          </pre>
-          <br />
+          
         </div>
       </section>
         </div>
