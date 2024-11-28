@@ -159,6 +159,7 @@ export default function Documentation({ address }: { address: string }) {
   -H "Content-Type: application/json" \\
   -d '{"api_key": "your_api_key"}'`}
           </pre>
+          <br />
           <h3>2. Make Your First API Call</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/tts \\
@@ -169,11 +170,7 @@ export default function Documentation({ address }: { address: string }) {
     "voice_id": "en-US-1"
   }'`}
           </pre>
-        </div>
-      </section>
-      <section className="mt-8">
-        {/* <h2 className="text-2xl font-bold mb-4">Additional API Examples</h2> */}
-        <div>
+          <br />
           <h3>3. Text-to-Speech</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/tts \\
@@ -186,9 +183,7 @@ export default function Documentation({ address }: { address: string }) {
     "pitch": 0.0
   }'`}
           </pre>
-        </div>
-
-        <div>
+          <br />
           <h3>4. Speech-to-Text</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/stt \\
@@ -197,9 +192,7 @@ export default function Documentation({ address }: { address: string }) {
   -F "audio_file=@path_to_audio_file.wav" \\
   -F "language=en-US"`}
           </pre>
-        </div>
-
-        <div>
+          <br />
           <h3>5. Voice Cleaning</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/clean-voice \\
@@ -207,9 +200,7 @@ export default function Documentation({ address }: { address: string }) {
   -H "Content-Type: multipart/form-data" \\
   -F "audio_file=@path_to_audio_file_with_noise.wav"`}
           </pre>
-        </div>
-
-        <div>
+          <br />
           <h3>6. Voice Cloning</h3>
           <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
             {`curl -X POST https://api.audiomos.com/v1/clone-voice \\
@@ -218,8 +209,9 @@ export default function Documentation({ address }: { address: string }) {
   -F "sample_voice_file=@path_to_sample_voice.wav" \\
   -F "text_to_speak=This is my cloned voice speaking!"`}
           </pre>
+          <br />
         </div>
       </section>
-    </div>
+        </div>
   );
 }
