@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SigningStargateClient } from "@cosmjs/stargate";
+import CodeBlock from '../components/CodeBlock';
 
 interface Api {
   api_key: string;
@@ -120,7 +121,7 @@ export default function Documentation({ address }: { address: string }) {
               key={api.api_key}
               className="bg-gray-800 rounded-lg p-4 mb-4 shadow-md border border-gray-700"
             >
-              <h3 className="text-xl text-white font-semibold">API Key</h3>
+              <h2 className="text-xl text-white font-semibold">API Key</h2>
               <p className="text-white">Key: {api.api_key}</p>
               <p className="text-white">Credits Left: {api.credits_left}</p>
               <button
@@ -153,53 +154,55 @@ export default function Documentation({ address }: { address: string }) {
       <section className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Quick Start Guide</h2>
         <div>
-          <h3>1. Text-to-Speech</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-          {`curl -X POST \\
+          <h2 className='text-xl'>1. Text-to-Speech</h2>
+          <h4 className='my-2'>Get Available Models</h4>
+          <CodeBlock code={`curl ${API_URL}/tts/models`} />
+          <br />
+          <h4>Run TTS</h4>
+          <CodeBlock code={`curl -X POST \\
           -H "Content-Type: application/json" \\
           -d '{
-          "model_name": "text-to-speech",
-          "text": "Hello world",
-          "language": "en-US",
-          "emotion": "neutral",
-          "speaker": "JohnDoe",
-          "speed": 1.0,
-          "pitch": 0.5
+          "model_name": "MeloTTS",
+          "text": "Hello world. Hi People. How are you doing today?",
+          "language": "EN-INDIA",
+          "emotion": null,
+          "speaker": null,
+          "api_key": "your_api_key"
           }' \\
           -o output.wav \\
-          $API_URL/tts/synthesize`}
-          </pre>
+          ${API_URL}/tts/synthesize`}
+          /> 
           <br />  
 
-          <h3>2. Speech-to-Text</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-          {`curl -X POST \\
+          <h2 className='text-xl'>2. Speech-to-Text</h2>
+          <CodeBlock code={`curl -X POST \\
           -H "Content-Type: multipart/form-data" \\
-          -F "file=@<input_audio_file_path>" \\
+          -F "audio_file=@<input_audio_file_path>" \\
+          -F "api_key=your_api_key" \\
           -o <output_file_path> \\
-          $API_URL/stt/transcribe`}
-          </pre>
+          ${API_URL}/stt/transcribe`}
+          />
           <br />
-      
-          <h3>3. Voice Cleaning</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-          {`curl -X POST \\
+          
+          <h2 className='text-xl'>3. Voice Cleaning</h2>
+          <CodeBlock code={`curl -X POST \\
           -H "Content-Type: multipart/form-data" \\
           -F "audio_file=@path_to_audio_file.wav" \\
+          -F "api_key=your_api_key" \\
           -o cleaned_audio_file.wav \\
-          $API_URL/clean-audio/process`}
-          </pre>
+          ${API_URL}/clean-audio/process`}
+          />
           <br />
         
-          <h3>4. Voice Cloning</h3>
-          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
-          {`curl -X POST \\
+          <h2 className='text-xl'>4. Voice Cloning</h2>
+          <CodeBlock code={`curl -X POST \\
           -H "Content-Type: multipart/form-data" \\
-          -F "file=@path_to_audio_file.wav" \\
+          -F "reference_file=@path_to_audio_file.wav" \\
           -F "text=sampleText" \\
+          -F "api_key=your_api_key" \\
           -o cloned_audio.wav \\
-          $API_URL/vc/synthesize`}
-          </pre>
+          ${API_URL}/vc/synthesize`}
+          />
           <br />
           
         </div>
