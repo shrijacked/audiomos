@@ -171,6 +171,55 @@ export default function Documentation({ address }: { address: string }) {
           </pre>
         </div>
       </section>
+      <section className="mt-8">
+        {/* <h2 className="text-2xl font-bold mb-4">Additional API Examples</h2> */}
+        <div>
+          <h3>3. Text-to-Speech</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
+            {`curl -X POST https://api.audiomos.com/v1/tts \\
+  -H "Authorization: Bearer your_access_token" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "text": "Transforming text into spoken words.",
+    "voice_id": "en-US-1",
+    "speed": 1.0,
+    "pitch": 0.0
+  }'`}
+          </pre>
+        </div>
+
+        <div>
+          <h3>4. Speech-to-Text</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
+            {`curl -X POST https://api.audiomos.com/v1/stt \\
+  -H "Authorization: Bearer your_access_token" \\
+  -H "Content-Type: multipart/form-data" \\
+  -F "audio_file=@path_to_audio_file.wav" \\
+  -F "language=en-US"`}
+          </pre>
+        </div>
+
+        <div>
+          <h3>5. Voice Cleaning</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
+            {`curl -X POST https://api.audiomos.com/v1/clean-voice \\
+  -H "Authorization: Bearer your_access_token" \\
+  -H "Content-Type: multipart/form-data" \\
+  -F "audio_file=@path_to_audio_file_with_noise.wav"`}
+          </pre>
+        </div>
+
+        <div>
+          <h3>6. Voice Cloning</h3>
+          <pre className="bg-gray-800 text-gray-200 p-4 rounded overflow-x-auto">
+            {`curl -X POST https://api.audiomos.com/v1/clone-voice \\
+  -H "Authorization: Bearer your_access_token" \\
+  -H "Content-Type: multipart/form-data" \\
+  -F "sample_voice_file=@path_to_sample_voice.wav" \\
+  -F "text_to_speak=This is my cloned voice speaking!"`}
+          </pre>
+        </div>
+      </section>
     </div>
   );
 }
