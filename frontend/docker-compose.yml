@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "4173"
+    ports:
+      - "4173:4173"
