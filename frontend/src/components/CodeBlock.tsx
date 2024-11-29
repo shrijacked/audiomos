@@ -16,7 +16,7 @@ export default function CodeBlock({ code }: CodeBlockProps) {
 
   return (
     <div className="bg-gray-800 text-gray-200 p-4 rounded-lg overflow-x-auto relative">
-      <pre>{code}</pre>
+      <pre>{'>>'} {code}</pre>
       <button
         onClick={() => copyToClipboard(code)}
         className="absolute top-2 right-2 hover:bg-gray-700 p-1 rounded"

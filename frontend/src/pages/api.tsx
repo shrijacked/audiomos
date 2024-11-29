@@ -111,6 +111,8 @@ export default function Documentation({ address }: { address: string }) {
     getMyCurrentApis(address);
   }, [address]);
 
+  const firstApiKey = myAPIs.length > 0 ? myAPIs[0].api_key : "your_api_key";
+
   return (
     <div className="p-6 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
       <section>
@@ -167,7 +169,7 @@ export default function Documentation({ address }: { address: string }) {
           "language": "EN-INDIA",
           "emotion": null,
           "speaker": null,
-          "api_key": "your_api_key"
+          "api_key": "${firstApiKey}"
           }' \\
           -o output.wav \\
           ${API_URL}/tts/synthesize`}
@@ -175,10 +177,14 @@ export default function Documentation({ address }: { address: string }) {
           <br />  
 
           <h2 className='text-xl'>2. Speech-to-Text</h2>
+          <h4 className='my-2'>Get Available Models</h4>
+          <CodeBlock code={`curl ${API_URL}/stt/models`} />
+          <br />
+          <h4>Run STT</h4>
           <CodeBlock code={`curl -X POST \\
           -H "Content-Type: multipart/form-data" \\
           -F "audio_file=@<input_audio_file_path>" \\
-          -F "api_key=your_api_key" \\
+          -F "api_key=${firstApiKey}" \\
           -o <output_file_path> \\
           ${API_URL}/stt/transcribe`}
           />
@@ -188,7 +194,7 @@ export default function Documentation({ address }: { address: string }) {
           <CodeBlock code={`curl -X POST \\
           -H "Content-Type: multipart/form-data" \\
           -F "audio_file=@path_to_audio_file.wav" \\
-          -F "api_key=your_api_key" \\
+          -F "api_key=${firstApiKey}" \\
           -o cleaned_audio_file.wav \\
           ${API_URL}/clean-audio/process`}
           />
@@ -199,7 +205,7 @@ export default function Documentation({ address }: { address: string }) {
           -H "Content-Type: multipart/form-data" \\
           -F "reference_file=@path_to_audio_file.wav" \\
           -F "text=sampleText" \\
-          -F "api_key=your_api_key" \\
+          -F "api_key=${firstApiKey}" \\
           -o cloned_audio.wav \\
           ${API_URL}/vc/synthesize`}
           />
