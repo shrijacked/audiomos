@@ -1,4 +1,4 @@
-```markdown
+
 # AudioMOS
 
 **AudioMOS** is a comprehensive platform for audio processing models, including Text to Speech (TTS), Speech to Text (STT), and Voice Cloning, built on the Akash Network. It offers both API access and a web dashboard for seamless audio processing.
